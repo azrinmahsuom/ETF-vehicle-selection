@@ -1,0 +1,4 @@
+name,isin,index_tracked,reason,source,checked_on
+Vanguard Global Aggregate Bond UCITS ETF USD Hedged Accumulating,IE00BG47KJ78,Bloomberg Global Aggregate Float Adjusted and Scaled (USD Hedged),Different index variant (float adjusted and scaled),https://www.nl.vanguard/professional/product/etf/bond/9600/IE00BG47KJ78,2026-10-25
+Xtrackers II ESG Global Aggregate Bond UCITS ETF 5C EUR hedged,LU0942970798,Bloomberg MSCI Global Aggregate Sustainable and SRI Currency Neutral (EUR Hedged),ESG index variant and EUR hedged,https://www.justetf.com/en/etf-profile.html?isin=LU0942970798,2026-10-25
+Global Aggregate share classes hedged to EUR / GBP / CHF / SEK / AUD,,Bloomberg Global Aggregate (non-USD hedged),Hedged to a currency other than the USD base (R1),https://www.etfstream.com/etf-screener/AGBP,2026-10-25

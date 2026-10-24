@@ -130,3 +130,10 @@ One entry per rule. **Status** is one of: *Supported* (evidence backs the rule a
 **Rule:** Hand-researched inputs go in `reference/` (committed), with a source, a checked-on date and a `verified`/`to_verify` status on every row. Personal inputs (portfolio start, portfolio value, holdings, switch log) go in `data/external/` (not committed).
 **Evidence:** Reproducibility requirement in AGENTS.md; keeping personal financial details out of a public repo.
 **Alternatives considered:** Committing `data/external/` (rejected: it would also publish personal inputs). Keeping everything uncommitted (rejected: not reproducible).
+
+### 2026-10-25 — R14 Candidate matching: exact index only
+**Status:** Decided (applies the owner's "whichever ETFs track those indices count as candidates")
+**Rule:** A share class is a candidate only if its stated benchmark is the exact index: MSCI ACWI (equity), or the Bloomberg Global Aggregate unhedged or USD-hedged (bonds). Any replication method (physical or swap), domicile, or distribution policy qualifies. Excluded: index variants (float-adjusted, ESG, IMI), different index families (e.g. FTSE All-World, so VWRA is out), and classes hedged to a currency other than USD. Each exclusion is listed with its reason in `reference/excluded_candidates.csv`.
+**Evidence:** Tracking difference is only meaningful against the fund's own benchmark (R12). A different index differs in constituents and returns, not just in cost.
+**Alternatives considered:** Include close equivalents such as VWRA or VAGU. Rejected as candidates because their tracking difference is measured against another index. They could be shown in a separate "near-equivalents" table if the owner wants.
+**First pass (2026-10-25):** 13 equity, 5 bond unhedged and 6 bond USD-hedged candidates, mostly from justETF (data dated 2026-10-23) and so marked `to_verify` until checked against issuer factsheets. Gaps: tickers and exchanges for most rows; hedging status of the two Amundi Core Global Aggregate classes (LU1437024729, LU1737654019); withholding rates for Luxembourg- and France-domiciled distributing classes (R4).
