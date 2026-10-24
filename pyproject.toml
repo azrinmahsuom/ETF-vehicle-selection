@@ -1,7 +1,7 @@
 [project]
 name = "analysis"
 version = "0.1.0"
-description = "{{One-line project description}}"
+description = "Quarterly ranking of ETFs tracking MSCI ACWI and the Bloomberg Global Aggregate by total cost of ownership for a Singapore tax-resident investor"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

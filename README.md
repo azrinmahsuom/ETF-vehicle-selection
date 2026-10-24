@@ -1,46 +1,39 @@
-<!-- START HERE (removed by /new-project)
-New project from the template? Open this folder in VS Code, open Claude Code, and run /new-project.
-It interviews you, writes docs/brief.md and fills in this README. Delete this block once done. -->
+# ETF Vehicle Selection
 
-# {{Project Title}}
+> **One line:** A quarterly tool that ranks the ETFs tracking MSCI ACWI and the Bloomberg Global Aggregate by total cost of ownership for a Singapore tax-resident investor, and flags when a holding should be switched.
 
-> **One-line thesis:** {{e.g. "Singapore REITs with sub-35% gearing outperformed the index on a risk-adjusted basis, 2015–2025."}}
-
-![CI](https://github.com/azrinmahsuom/{{repo-name}}/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/azrinmahsuom/ETF-vehicle-selection/actions/workflows/ci.yml/badge.svg)
 
 ## Summary
 
 | | |
 |---|---|
-| **Question** | {{What are you trying to find out?}} |
-| **Universe / period** | {{e.g. SGX-listed REITs, Jan 2015 – Dec 2025, monthly}} |
-| **Method** | {{e.g. factor screen + backtest, DCF, regression}} |
-| **Headline result** | {{One number with context, e.g. "Sharpe 0.82 vs 0.51 benchmark, net of 20 bps costs"}} |
-| **Status** | {{In progress / Complete}} |
+| **Question** | Each quarter: which ETF is the cheapest way to hold each index, and should any current holding be switched? |
+| **Universe / period** | ETFs tracking MSCI ACWI (global equity) and the Bloomberg Global Aggregate (global bonds); daily total returns, trailing 3 years (1- and 5-year context), USD base with SGD shown |
+| **Method** | Total cost of ownership = tracking difference vs the net index (includes expense ratio and fund-level withholding) + investor-level withholding + trading costs; rank within each sleeve; switch only if the annual saving over a 20-year horizon exceeds this switch's cost plus any cost not yet recovered from earlier switches; flag US estate-tax exposure |
+| **Headline result** | TBD |
+| **Status** | In progress |
 
 ## Key findings
 
-1. {{Finding, with the chart that shows it}}
-2. {{Finding}}
-3. {{What surprised you, or what didn't work}}
+TBD
 
-![Headline chart](reports/figures/headline.png)
+<!-- Headline chart goes here once reports/figures/headline.png exists. -->
 
 ## Limitations
 
-Be specific. Reviewers trust a project more when it names its own weak points.
-
-- {{e.g. Survivorship bias: universe is today's constituents}}
-- {{e.g. No transaction costs below monthly rebalancing}}
-- {{e.g. Small sample: 11 years, one rate cycle}}
+- TBD. Expected so far:
+  - The candidate list is maintained by hand, so newly launched ETFs only appear once they're added.
+  - Bid-ask spreads may be estimated from daily high/low where actual quotes aren't available.
+  - Benchmark index data is licensed, so only derived tracking differences are published.
 
 ## Reproduce it
 
 Requires [uv](https://docs.astral.sh/uv/) (installs Python for you).
 
 ```bash
-git clone https://github.com/azrinmahsuom/{{repo-name}}.git
-cd {{repo-name}}
+git clone https://github.com/azrinmahsuom/ETF-vehicle-selection.git
+cd ETF-vehicle-selection
 uv sync                  # create the environment
 cp .env.example .env     # add any API keys (never committed)
 uv run pytest            # check everything works
@@ -63,7 +56,12 @@ uv run python -m analysis.pipeline   # run the analysis end to end
 
 | Source | What | Licence / terms |
 |---|---|---|
-| {{e.g. Yahoo Finance via yfinance}} | {{Daily prices}} | {{Personal, non-commercial use}} |
+| Yahoo Finance via yfinance | ETF daily prices and dividends | Personal, non-commercial use |
+| Issuer factsheets and KIIDs | Expense ratio, domicile, share class, hedging | Public documents |
+| MSCI, Bloomberg (via index provider or issuer factsheets) | Benchmark index levels | Licensed; derived results only |
+| MAS, or yfinance `SGD=X` | USD/SGD exchange rates | Public |
+| Tax treaty rates | Dividend withholding tax by domicile | Public |
+| Exchange or issuer data | Bid-ask spreads | Public; derived results |
 
 ## Disclaimer
 

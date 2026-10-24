@@ -4,7 +4,7 @@ Shared instructions for any coding agent working in this repository (Claude Code
 
 ## What this repo is
 
-A public, portfolio-quality investment project by Azrin Mahsuom, CFA. The audience is a recruiter or hiring manager skimming on GitHub, so the README must stand on its own and every number in it must be reproducible from the code.
+A public investment project by Azrin Mahsuom, CFA. The README must stand on its own for anyone reading it on GitHub, and every number in it must be reproducible from the code.
 
 `docs/brief.md` is the source of truth for this project's goal, scope, method and success criteria. If it still contains `{{placeholders}}`, stop and suggest running `/new-project` before writing any analysis code.
 
@@ -16,7 +16,8 @@ A public, portfolio-quality investment project by Azrin Mahsuom, CFA. The audien
 4. **No look-ahead bias.** A signal at time t uses only data available at t. Lag fundamentals by their publication delay. If you can't guarantee this, say so explicitly.
 5. **No survivorship bias without disclosure.** If the universe is today's constituents, state it in the README's Limitations.
 6. **Never fabricate numbers.** Every figure in the README or reports must come from running the code. If it hasn't been computed, write `TBD`.
-7. **Stay within the brief.** If a request goes beyond `docs/brief.md`, point it out and ask whether to update the brief first. Add anything unresolved to its "Open questions" section rather than silently assuming.
+7. **Every decision is rule-based and evidence-backed.** Each methodology choice, threshold and default is written as an explicit rule the code applies mechanically (no case-by-case judgement), and cites the research or data that supports it in `docs/decisions.md`. If no evidence has been found yet, mark the rule `Evidence: pending` and add it to the brief's "Open questions"; never present an unsupported choice as settled.
+8. **Stay within the brief.** If a request goes beyond `docs/brief.md`, point it out and ask whether to update the brief first. Add anything unresolved to its "Open questions" section rather than silently assuming.
 
 ## How to work with the owner
 

@@ -13,7 +13,7 @@ Update the README so it reflects what the code actually produces.
    - **Limitations:** specific, taken from the brief, the decision log and any `/bias-check` findings.
    - **Status:** Complete or In progress.
    - Keep the disclaimer unchanged.
-4. Write for a recruiter skimming for 60 seconds: lead with the answer, no jargon without a gloss, no hype words.
+4. Write for a reader skimming for 60 seconds: lead with the answer, no jargon without a gloss, no hype words.
 5. Show the diff and ask before committing.
 6. Finally, draft the row for the profile README at github.com/azrinmahsuom/azrinmahsuom, in this format, and show it to the owner to paste in:
 
