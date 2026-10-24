@@ -83,7 +83,7 @@ Not applicable (Tool).
 ## 15. Open questions
 - **IBKR pricing:** Pro Fixed or Pro Tiered (Fixed assumed, R8). Portfolio start (Jan 2026) and value are recorded in `data/external/portfolio.toml`.
 - **Near-equivalents:** candidates are exact-index only (R14), so VWRA and VAGU are excluded. Show them in a separate comparison table?
-- **Candidate data gaps:** tickers and exchanges, Amundi Global Agg hedging status, and withholding rates for Luxembourg/France distributing classes (R14, R4).
+- **Candidate data gaps** (run `analysis.reference.coverage_gaps` for the current list): no IBKR fee schedule for SIX (3 candidates); no withholding rate for Luxembourg-domiciled distributions (1 candidate); most rows still `to_verify`.
 - **Current holdings and switch log:** where the tool reads current holdings and the switch log (date, cost `C` and expected saving `S` of each past switch) from. Default: manual files in `data/external/` (not committed, R13).
 - **Evidence review (2026-10-25, rules R1–R12 in `docs/decisions.md`).**
   - Supported: R1 USD base, R2 3-year window (as convention), R4 withholding rates, R5 estate-tax flag, R10 spread estimator, R12 hedged/unhedged separation.

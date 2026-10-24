@@ -137,3 +137,9 @@ One entry per rule. **Status** is one of: *Supported* (evidence backs the rule a
 **Evidence:** Tracking difference is only meaningful against the fund's own benchmark (R12). A different index differs in constituents and returns, not just in cost.
 **Alternatives considered:** Include close equivalents such as VWRA or VAGU. Rejected as candidates because their tracking difference is measured against another index. They could be shown in a separate "near-equivalents" table if the owner wants.
 **First pass (2026-10-25):** 13 equity, 5 bond unhedged and 6 bond USD-hedged candidates, mostly from justETF (data dated 2026-10-23) and so marked `to_verify` until checked against issuer factsheets. Gaps: tickers and exchanges for most rows; hedging status of the two Amundi Core Global Aggregate classes (LU1437024729, LU1737654019); withholding rates for Luxembourg- and France-domiciled distributing classes (R4).
+
+### 2026-10-25 — R15 Which listing to use for each share class
+**Status:** Decided
+**Rule:** Use a USD-traded listing where one exists, because it avoids an FX conversion on every trade (R8). Among USD listings, prefer LSE, then Euronext Amsterdam, SIX, XETRA, Euronext Paris. If there's no USD listing, use the main EUR listing; FX conversion cost is then added to its trading cost.
+**Evidence:** IBKR charges 0.2 bps (min USD 2) per FX conversion (R8). The USD base currency is set by R1. LSE comes first because its IBKR fee schedule is the best documented of the venues (`reference/broker_fees.csv`).
+**Result (2026-10-25):** 20 of 24 candidates have a USD listing; 4 trade in EUR only (LU1829220216, FR0014017NX3, LU3243907741, LU1737654019). 8 candidates are under 3 years old and can't trigger a switch (R11): SCWX, ACSW, GPEA, ALLCE, ALLC, ISDA, AGAC, HGAD.

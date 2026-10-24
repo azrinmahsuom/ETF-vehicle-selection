@@ -2,3 +2,5 @@ broker,plan,market,fee_type,rate,per_share,minimum,max_fraction,currency,source,
 IBKR,Pro Fixed,US,per_share,,0.005,1.00,0.01,USD,https://investors.interactivebrokers.com/en/pricing/commissions-home.php,2026-10-25,to_verify
 IBKR,Pro Fixed,LSE,percent,0.0005,,4.00,,USD,https://www.guyrutenberg.com/2025/01/04/tiered-vs-fixed-commissions-in-ibkr/ (Jan 2025 blog),2026-10-25,to_verify
 IBKR,Pro,FX,percent,0.00002,,2.00,,USD,https://www.interactivebrokers.ca/en/trading/us-stock-trading-costs-for-canadian-resi.php,2026-10-25,to_verify
+IBKR,Pro Fixed,XETRA,percent,0.0005,,3.00,,EUR,https://www.bankeronwheels.com/?p=109736 (updated 2026-07-28),2026-10-25,to_verify
+IBKR,Pro Fixed,Euronext,percent,0.0005,,3.00,,EUR,https://www.bankeronwheels.com/?p=109736 (updated 2026-07-28),2026-10-25,to_verify
