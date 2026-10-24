@@ -46,7 +46,7 @@ One source per line, with whether results derived from it can be published.
 | Bid-ask spreads | Exchange or issuer data, or estimated from daily high/low | Yes, derived results |
 
 ## 9. Processing steps
-1. Build the candidate list: ETFs tracking each benchmark, with domicile, listing, share class and hedging. Maintained by hand in `data/external/`, with dates.
+1. Build the candidate list: ETFs tracking each benchmark, with domicile, listing, share class and hedging. Maintained by hand in `reference/candidates.csv`, with sources and dates (R13).
 2. Download daily total-return prices, dividends and USD/SGD FX.
 3. Calculate each candidate's costs (R3): tracking difference against the benchmark's net total return variant over 1, 3 and 5 years (this already includes the expense ratio and fund-level withholding), investor-level withholding on distributions, and trading costs (bid-ask spread, commission, FX conversion). The expense ratio is shown for information only.
 4. Total cost of ownership = −tracking difference + investor-level withholding + annualised trading costs, in USD. Convert to SGD and break out the FX impact.
@@ -81,10 +81,9 @@ By hand, quarterly, started by me as part of my portfolio review.
 Not applicable (Tool).
 
 ## 15. Open questions
-- **Portfolio start date:** needed for the remaining 20-year horizon (R6).
-- **IBKR plan:** Fixed or Tiered, and position sizes (for commission minimums, R8).
+- **IBKR pricing:** Pro Fixed or Pro Tiered (Fixed assumed, R8). Portfolio start (Jan 2026) and value are recorded in `data/external/portfolio.toml`.
 - **Index matching:** does "tracks ACWI" mean MSCI ACWI exactly, or close equivalents too (e.g. VWRA, which tracks FTSE All-World)? The same question applies to Global Aggregate look-alikes.
-- **Current holdings and switch log:** where the tool reads current holdings and the switch log (date, cost `C` and expected saving `S` of each past switch) from. Default: manual files in `data/external/`.
+- **Current holdings and switch log:** where the tool reads current holdings and the switch log (date, cost `C` and expected saving `S` of each past switch) from. Default: manual files in `data/external/` (not committed, R13).
 - **Evidence review (2026-10-25, rules R1–R12 in `docs/decisions.md`).**
   - Supported: R1 USD base, R2 3-year window (as convention), R4 withholding rates, R5 estate-tax flag, R10 spread estimator, R12 hedged/unhedged separation.
   - Decided by owner 2026-10-25: R3 cost formula, R6/R7 breakeven switch rule with a 20-year horizon and unrecovered costs, R9 no risk-free rate, R11 short-history ETFs cannot trigger a switch.

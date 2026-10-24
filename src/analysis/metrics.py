@@ -37,3 +37,28 @@ def max_drawdown(returns: pd.Series) -> float:
     wealth = (1 + returns).cumprod()
     peak = wealth.cummax()
     return float((wealth / peak - 1).min())
+
+
+def tracking_difference(
+    fund_returns: pd.Series, index_returns: pd.Series, periods_per_year: int = TRADING_DAYS
+) -> float:
+    """Annualised fund return minus annualised index return over their common dates (rule R3).
+
+    Negative means the fund lagged its index. Measured against the index's net total return
+    variant, it already includes the expense ratio and fund-level withholding tax.
+    """
+    fund, index = fund_returns.align(index_returns, join="inner")
+    return annualised_return(fund, periods_per_year) - annualised_return(index, periods_per_year)
+
+
+def calendar_year_tracking_difference(
+    fund_returns: pd.Series, index_returns: pd.Series
+) -> pd.Series:
+    """Tracking difference for each calendar year, not annualised (rule R2 consistency check).
+
+    Both inputs need a DatetimeIndex. Partial years are included as they stand.
+    """
+    fund, index = fund_returns.align(index_returns, join="inner")
+    fund_growth = (1 + fund).groupby(fund.index.year).prod()
+    index_growth = (1 + index).groupby(index.index.year).prod()
+    return fund_growth - index_growth

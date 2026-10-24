@@ -34,3 +34,4 @@ select = ["E", "F", "I", "B", "UP", "PD", "NPY"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src"]  # import without the editable install (macOS can hide its .pth file)

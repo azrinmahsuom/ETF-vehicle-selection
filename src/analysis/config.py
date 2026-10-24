@@ -14,7 +14,9 @@ FIGURES = ROOT / "reports" / "figures"
 load_dotenv(ROOT / ".env")
 
 TRADING_DAYS = 252
-TRANSACTION_COST_BPS = 10  # per side; override in docs/brief.md if different
+TRANSACTION_COST_BPS = 10  # per side; fallback only when measured costs are missing (R8)
+HORIZON_YEARS = 20  # investment horizon counted from the portfolio start (R6)
+REFERENCE = ROOT / "reference"  # hand-researched inputs with sources, committed
 
 
 def get_secret(name: str) -> str:

@@ -47,6 +47,7 @@ uv run python -m analysis.pipeline   # run the analysis end to end
 ├── data/              Raw, external and processed data (contents git-ignored)
 ├── docs/              Project brief and methodology decision log
 ├── notebooks/         Exploration only; anything reusable moves to src/
+├── reference/         Hand-researched inputs with sources (candidates, tax rates, broker fees)
 ├── reports/           Final write-up and figures (committed)
 ├── src/analysis/      Reusable code: loading, cleaning, metrics, pipeline
 └── tests/             Tests for the code in src/
