@@ -1,0 +1,25 @@
+"""Project paths and settings. Import from here rather than hardcoding paths."""
+
+import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+ROOT = Path(__file__).resolve().parents[2]
+DATA_RAW = ROOT / "data" / "raw"
+DATA_EXTERNAL = ROOT / "data" / "external"
+DATA_PROCESSED = ROOT / "data" / "processed"
+FIGURES = ROOT / "reports" / "figures"
+
+load_dotenv(ROOT / ".env")
+
+TRADING_DAYS = 252
+TRANSACTION_COST_BPS = 10  # per side; override in docs/brief.md if different
+
+
+def get_secret(name: str) -> str:
+    """Return an API key from the environment, failing clearly if it's missing."""
+    value = os.getenv(name)
+    if not value:
+        raise RuntimeError(f"{name} is not set. Copy .env.example to .env and add it.")
+    return value
