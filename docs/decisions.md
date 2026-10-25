@@ -177,3 +177,14 @@ One entry per rule. **Status** is one of: *Supported* (evidence backs the rule a
 **Status:** Decided (follows R14)
 **Rule:** Calendar years before a share class switched to the exact benchmark are excluded from its tracking difference.
 **Evidence:** Amundi switched LU1437024729 (GAGU) from the Bloomberg Barclays Global Aggregate 500M index on 2024-01-17 ([LSE RNS, 14 Dec 2023](https://lse.co.uk/rns/GAGG/amundi-etf-8211-important-information-8211-index-and-name-change-8211-17012024-71bseuis9tjm7zy.html?page=22)). Its 2024–2025 returns qualify; 2023 does not.
+
+### 2026-10-25 — R16 refinement: rank on tracking difference with each factsheet's own benchmark
+**Status:** Decided (data-driven; replaces ranking on raw NAV return)
+**Context:** Owner-supplied Amundi factsheets report the Global Aggregate Acc class (LU1437024729) and the ACWI EUR class (LU1829220216) in EUR, with the benchmark also in EUR. UBS publishes 12-month periods to 30 September rather than calendar years. Benchmark figures for the same variant differ slightly between issuers (USD-hedged 2023: Amundi 7.11%, SPDR 7.15%).
+**Rule:**
+- `reference/annual_returns.csv` stores, per share class and period: NAV return, benchmark return in the same currency, period end, and currency.
+- Where the factsheet's benchmark is the share class's variant, that benchmark is used. Otherwise (iShares USD-hedged classes, whose factsheets show the unhedged index) the variant's benchmark comes from `reference/benchmark_returns.csv`.
+- Each candidate uses its 3 most recent 12-month periods ending on or before the run date; the window end is shown in the output.
+- Ranking within a variant is by tracking difference, which is close to currency-invariant because fund and benchmark are measured in the same currency.
+**Evidence:** Tracking difference is defined against the fund's benchmark in the fund's currency (R12, ESMA guidelines). The factsheets above, saved by the owner in `data/external/` (not committed; public documents).
+**Limitation:** UBS's window ends 2026-09 while the others end 2025-12, so its tracking difference covers a different 3 years. It is flagged by `window_end`, not adjusted.

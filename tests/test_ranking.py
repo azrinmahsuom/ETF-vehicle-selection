@@ -5,37 +5,45 @@ import pytest
 
 from analysis import ranking
 
-
-def test_last_complete_years():
-    assert ranking.last_complete_years(date(2026, 10, 25)) == [2023, 2024, 2025]
-    assert ranking.last_complete_years(date(2026, 1, 1), n=2) == [2024, 2025]
-
-
 CANDIDATES = pd.DataFrame(
-    {"isin": ["A", "B", "C"], "ticker": ["AAA", "BBB", "CCC"], "benchmark_variant": ["X"] * 3}
+    {
+        "isin": ["A", "B", "C", "D"],
+        "ticker": ["AAA", "BBB", "CCC", "DDD"],
+        "benchmark_variant": ["X"] * 4,
+    }
 )
-BENCH = pd.DataFrame(
-    {"benchmark_variant": ["X", "X"], "year": [2024, 2025], "index_return": [0.10, 0.20]}
+ANNUAL = pd.DataFrame(
+    {
+        "isin": ["A", "A", "A", "B", "D"],
+        "period_end": ["2023-12-31", "2024-12-31", "2025-12-31", "2025-12-31", "2025-09-30"],
+        "nav_return": [0.50, 0.099, 0.198, 0.201, 0.05],
+        "benchmark_return": [0.50, 0.10, 0.20, 0.20, None],
+    }
 )
 
 
-def test_tracking_difference_table_full_and_partial_history():
-    annual = pd.DataFrame(
-        {
-            "isin": ["A", "A", "B"],
-            "year": [2024, 2025, 2025],
-            "nav_return": [0.099, 0.198, 0.201],
-        }
-    )
-    t = ranking.tracking_difference_table(CANDIDATES, annual, BENCH, [2024, 2025]).set_index("isin")
-    # A: two full years
-    expected_a = (1.099 * 1.198) ** 0.5 - (1.10 * 1.20) ** 0.5
-    assert t.loc["A", "tracking_difference"] == pytest.approx(expected_a)
-    assert t.loc["A", "complete"]
-    # B: 2025 only, measured against the 2025 index return, marked incomplete
+def test_uses_latest_periods_up_to_as_of():
+    t = ranking.tracking_difference_table(CANDIDATES, ANNUAL, date(2026, 10, 25), n_periods=2)
+    a = t.set_index("isin").loc["A"]
+    # Latest two periods only (2024, 2025); 2023 is dropped
+    assert a["tracking_difference"] == pytest.approx((1.099 * 1.198) ** 0.5 - (1.10 * 1.20) ** 0.5)
+    assert a["complete"]
+    assert a["window_end"] == pd.Timestamp("2025-12-31")
+
+
+def test_partial_missing_and_no_benchmark():
+    t = ranking.tracking_difference_table(CANDIDATES, ANNUAL, date(2026, 10, 25), n_periods=2)
+    t = t.set_index("isin")
     assert t.loc["B", "tracking_difference"] == pytest.approx(0.001)
-    assert t.loc["B", "years_covered"] == 1
+    assert t.loc["B", "periods"] == 1
     assert not t.loc["B", "complete"]
-    # C: no returns at all
     assert pd.isna(t.loc["C", "tracking_difference"])
-    assert t.loc["C", "years_covered"] == 0
+    assert t.loc["C", "periods"] == 0
+    # D has a return but no benchmark -> NAV known, tracking difference unknown
+    assert t.loc["D", "nav_annualised"] == pytest.approx(0.05)
+    assert pd.isna(t.loc["D", "tracking_difference"])
+
+
+def test_periods_after_as_of_are_ignored():
+    t = ranking.tracking_difference_table(CANDIDATES, ANNUAL, date(2025, 6, 30), n_periods=3)
+    assert t.set_index("isin").loc["A", "periods"] == 2
