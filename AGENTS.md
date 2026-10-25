@@ -31,7 +31,7 @@ The root `README.md` is the only README. Folder rules live here.
 
 - `src/analysis/`: all reusable logic. Small functions, type hints, docstrings.
   - `config.py` paths and settings · `data.py` downloads and loading · `reference.py` reference inputs and gap checks · `metrics.py` returns and tracking difference · `costs.py` cost model and switch rule · `ranking.py` tracking-difference table · `pipeline.py` end-to-end run
-- `reference/` (committed): hand-researched inputs that code can't download (R13): `candidates.csv`, `excluded_candidates.csv`, `withholding_rates.csv`, `broker_fees.csv`, `annual_returns.csv`, `benchmark_returns.csv`.
+- `reference/` (committed): hand-researched inputs that code can't download (R13): `candidates.csv`, `excluded_candidates.csv`, `near_equivalents.csv`, `withholding_rates.csv`, `broker_fees.csv`, `annual_returns.csv`, `benchmark_returns.csv`.
   - Every row cites a source and the date it was checked, with `status` `verified` (primary document) or `to_verify` (secondary source).
   - When a value changes, update the row, its date and its source; git history keeps the old value.
 - `data/` (not committed): `raw/` downloads exactly as received, never edited by hand · `external/` the owner's personal inputs (portfolio, holdings, switch log) · `processed/` outputs written only by `src/analysis/`. Folders are created by the code.

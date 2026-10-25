@@ -167,3 +167,13 @@ One entry per rule. **Status** is one of: *Supported* (evidence backs the rule a
 - Benchmark returns are therefore stored once per variant in `reference/benchmark_returns.csv`, taken from a factsheet whose benchmark matches the variant. SPDR's hedged factsheets print the USD-hedged index LEGATRUH.
 - Within a variant, ranking by annualised NAV return gives the same order as ranking by tracking difference, because the index return is common to all of them.
 - First result (2023–2025, 10 verified classes): every tracking difference is between −0.21% and +0.05% a year, consistent with the funds' 0.10–0.32% expense ratios after withholding effects.
+
+### 2026-10-25 — R17 Near-equivalents shown in a separate comparison table
+**Status:** Decided by owner 2026-10-25 ("separate comparison")
+**Rule:** Funds tracking a close but different index (currently VWRA on FTSE All-World and VAGU on Bloomberg Global Aggregate Float Adjusted and Scaled) are listed in `reference/near_equivalents.csv`. They are shown in a separate table with expense ratio, tracking difference against their *own* index, withholding and trading costs. They are never ranked against the candidates and can't trigger a switch (R14).
+**Evidence:** Vanguard factsheets (as at 2026-09-30): VWRA OCF 0.14%, 3-year NAV return 21.65% a year vs FTSE All-World 21.65%; VAGU OCF 0.08%, 3.97% vs 4.07%. Vanguard reports trailing periods to quarter-end, not calendar years, so the window differs from the candidates' (R16) and is labelled in the table.
+
+### 2026-10-25 — R14 refinement: only count years when the fund tracked the exact index
+**Status:** Decided (follows R14)
+**Rule:** Calendar years before a share class switched to the exact benchmark are excluded from its tracking difference.
+**Evidence:** Amundi switched LU1437024729 (GAGU) from the Bloomberg Barclays Global Aggregate 500M index on 2024-01-17 ([LSE RNS, 14 Dec 2023](https://lse.co.uk/rns/GAGG/amundi-etf-8211-important-information-8211-index-and-name-change-8211-17012024-71bseuis9tjm7zy.html?page=22)). Its 2024–2025 returns qualify; 2023 does not.

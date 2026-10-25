@@ -81,7 +81,6 @@ By hand, quarterly, started by me as part of my portfolio review.
 Not applicable (Tool).
 
 ## 15. Open questions
-- **Near-equivalents:** candidates are exact-index only (R14), so VWRA and VAGU are excluded. Show them in a separate comparison table?
 - **Candidate data gaps** (run `analysis.reference.coverage_gaps` for the current list): no withholding rate for Luxembourg-domiciled distributions (1 candidate); most rows still `to_verify`.
 - **Current holdings and switch log:** where the tool reads current holdings and the switch log (date, cost `C` and expected saving `S` of each past switch) from. Default: manual files in `data/external/` (not committed, R13).
 - **Evidence review (2026-10-25, rules R1–R12 in `docs/decisions.md`).**
