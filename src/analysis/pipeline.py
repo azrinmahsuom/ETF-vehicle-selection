@@ -13,8 +13,8 @@ from datetime import date
 
 import pandas as pd
 
-from analysis import costs, data, ranking, reference
-from analysis.config import DATA_EXTERNAL, DATA_PROCESSED, DEFAULT_SPREAD, ROOT
+from analysis import charts, costs, data, ranking, reference
+from analysis.config import DATA_EXTERNAL, DATA_PROCESSED, DEFAULT_SPREAD, FIGURES, ROOT
 
 FX_SYMBOLS = ["SGD=X", "EURUSD=X"]  # SGD per USD; USD per EUR
 
@@ -43,8 +43,16 @@ def latest(prices: pd.DataFrame, symbol: str, column: str = "close") -> float:
     return float(rows[column].iloc[-1])
 
 
-def load_personal() -> tuple[dict, pd.DataFrame, list[costs.PastSwitch]]:
-    """Portfolio settings, holdings and switch log from data/external (not committed)."""
+PERSONAL_FILES = ["portfolio.toml", "holdings.csv", "switch_log.csv"]
+
+
+def load_personal() -> tuple[dict, pd.DataFrame, list[costs.PastSwitch]] | None:
+    """Portfolio settings, holdings and switch log from data/external (not committed).
+
+    Returns None when any file is missing (e.g. a fresh clone), so only the public ranking runs.
+    """
+    if not all((DATA_EXTERNAL / f).exists() for f in PERSONAL_FILES):
+        return None
     with open(DATA_EXTERNAL / "portfolio.toml", "rb") as f:
         portfolio = tomllib.load(f)
     holdings = pd.read_csv(DATA_EXTERNAL / "holdings.csv", dtype={"isin": str})
@@ -63,7 +71,7 @@ def run(as_of: date, download: bool = True) -> None:
     annual = reference.load_reference("annual_returns")
     spreads = reference.load_reference("spreads")
     near = reference.load_reference("near_equivalents")
-    portfolio, holdings, switches = load_personal()
+    personal = load_personal()
 
     candidates["symbol"] = [
         data.yahoo_symbol(t, e)
@@ -93,6 +101,23 @@ def run(as_of: date, download: bool = True) -> None:
     table["spread"] = [published.get(k, DEFAULT_SPREAD) for k in keys]
     table["spread_source"] = ["published" if k in published.index else "default" for k in keys]
 
+    quarter = quarter_label(as_of)
+    gaps = reference.coverage_gaps(candidates, withholding, fees, annual)
+    write_public_ranking(table, near, gaps, as_of, quarter)
+    charts.holding_cost_chart(table, quarter, FIGURES / "headline.png")
+    charts.yearly_td_chart(
+        annual,
+        {"IE00B44Z5B48": "ACWD (SPDR)", "IE00B6R52259": "ISAC (iShares)"},
+        FIGURES / "acwi_yearly_tracking_difference.png",
+    )
+    if personal is None:
+        print(
+            f"Public ranking written to reports/{quarter}/. No personal inputs in data/external "
+            f"({', '.join(PERSONAL_FILES)}), so the switch review was skipped."
+        )
+        return
+    portfolio, holdings, switches = personal
+
     # Switch review for each holding (R6, R7, R8)
     eur_per_usd = 1 / latest(prices, "EURUSD=X")
     sgd_per_usd = latest(prices, "SGD=X")
@@ -112,9 +137,6 @@ def run(as_of: date, download: bool = True) -> None:
         one_way_by_holding[h.isin] = one_way
         decisions.append(ranking.switch_decision(h.isin, table, one_way, unrecovered, remaining))
 
-    quarter = quarter_label(as_of)
-    gaps = reference.coverage_gaps(candidates, withholding, fees, annual)
-    write_public_ranking(table, near, gaps, as_of, quarter)
     write_switch_review(
         table,
         holdings,
