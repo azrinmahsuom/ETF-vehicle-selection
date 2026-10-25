@@ -94,15 +94,16 @@ One entry per rule. **Status** is one of: *Supported* (evidence backs the rule a
 **Implementation choice:** Savings accrue at the `S` recorded at the time of the switch (as in the owner's example), not at a re-measured figure, so `U` is deterministic and auditable.
 
 ### 2026-10-25 — R8 Default switching cost: 10 bps per side
-**Status:** Decided by owner 2026-10-25. Broker: Interactive Brokers (IBKR).
+**Status:** Decided by owner 2026-10-25. Broker: Interactive Brokers (IBKR), Pro Tiered plan.
 **Rule:** Switching cost per side = half the measured spread (R10) + IBKR commission for the trade size + FX conversion cost (if a currency conversion is needed). Commission and FX are computed from a dated fee schedule in `data/external/broker_fees.csv`, so they scale with the position size. Use 10 bps per side only if a measured figure is missing, and flag it.
-**IBKR schedule as found (to verify before use):**
-- US-listed: Fixed USD 0.005 per share, min USD 1.00, max 1% of trade value. Tiered USD 0.0005–0.0035 per share, min USD 0.35, plus exchange, regulatory and clearing fees ([IBKR](https://investors.interactivebrokers.com/en/pricing/commissions-home.php)).
-- LSE: Fixed 0.05% of value, min USD 4. Tiered from USD 1.70 min plus exchange and clearing fees. Source is a Jan 2025 blog ([Rutenberg](https://www.guyrutenberg.com/2025/01/04/tiered-vs-fixed-commissions-in-ibkr/)); check IBKR's official LSE table.
-- FX: 0.2 bps of value, min USD 2 per conversion ([IBKR](https://www.interactivebrokers.ca/en/trading/us-stock-trading-costs-for-canadian-resi.php)).
-**Evidence:** Indicative London spreads for broad MSCI ACWI UCITS ETFs are about 2–7 bps ([HL SPDR ACWI](https://www.hl.co.uk/shares/shares-search-results/s/spdr-msci-acwi-ucits-etf-gbp), [Milano Finanza iShares ACWI](https://www.milanofinanza.it/quotazioni/dettaglio/ishares-msci-acwi-ucits-etf-2bf2ef0)); a niche variant shows 21 bps ([HL Xtrackers](https://hl.co.uk/shares/shares-search-results/x/xtrackers-msci-ac-world-ucits-etf-1c)). These are undated snapshots.
-**Inputs:** IBKR Pro; the portfolio value is in `data/external/portfolio.toml` (not committed). Fixed pricing is assumed until the owner confirms Fixed or Tiered. Because of the minimums, LSE Fixed costs at least USD 4 per order, which is above 0.05% for any trade under USD 8,000, and FX costs at least USD 2 per conversion.
-**Pending:** Fixed or Tiered; confirm rates on the IBKR Singapore pricing pages (rows in `reference/broker_fees.csv` are marked `to_verify`).
+**IBKR Pro Tiered schedule (owner's plan, confirmed 2026-10-25; verified on IBKR Singapore's public pricing pages):**
+- US-listed: USD 0.0035 per share, min USD 0.35, max 1% of trade value, plus regulatory, exchange and clearing fees.
+- USD-traded on LSE, SIX and Euronext Amsterdam: 0.05% of value, min USD 1.70, max USD 39 per order, plus exchange and clearing fees. Euronext also passes through EUR 0.75 per execution on ETFs.
+- EUR-traded on Euronext and XETRA: 0.05%, min EUR 1.25, max EUR 29 per order (plus EUR 0.75 per execution on Euronext ETFs).
+- FX: 0.2 bps of value, min USD 2 per conversion.
+- Sources: [IBKR SG stocks](https://www.interactivebrokers.com.sg/en/pricing/commissions-stocks.php), [IBKR SG spot currencies](https://www.interactivebrokers.com.sg/en/pricing/commissions-spot-currencies.php). All rows are in `reference/broker_fees.csv`.
+- Note: IBKR Lite offers zero-commission US trades to Singapore retail investors. That only matters for US-listed candidates (ACWI).
+**Pending:** Third-party exchange and clearing fees under Tiered aren't itemised on the main page and are not yet modelled. They're expected to be small relative to the commission; check the IBKR knowledge base.
 
 ### 2026-10-25 — R9 Risk-free rate
 **Status:** Approved by owner 2026-10-25. Not needed for ranking.

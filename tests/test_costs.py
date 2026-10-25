@@ -24,19 +24,25 @@ def test_annual_holding_cost_fund_beats_index():
     assert costs.annual_holding_cost(0.0010, 0.0) == pytest.approx(-0.0010)
 
 
-def test_percent_commission_above_and_below_minimum():
-    # 0.05% of 12,000 = 6.00; of 5,000 = 2.50 -> minimum 4.00 applies
-    assert costs.percent_commission(12_000, 0.0005, 4.0) == pytest.approx(6.0)
-    assert costs.percent_commission(5_000, 0.0005, 4.0) == pytest.approx(4.0)
+def test_percent_commission_minimum_and_cap():
+    # Tiered USD on LSE: 0.05% of 12,000 = 6.00; of 2,000 = 1.00 -> min 1.70
+    # and of 100,000 = 50 -> cap 39
+    assert costs.percent_commission(12_000, 0.0005, 1.70, 39.0) == pytest.approx(6.0)
+    assert costs.percent_commission(2_000, 0.0005, 1.70, 39.0) == pytest.approx(1.70)
+    assert costs.percent_commission(100_000, 0.0005, 1.70, 39.0) == pytest.approx(39.0)
+
+
+def test_percent_commission_no_cap():
+    assert costs.percent_commission(100_000, 0.0005, 1.70) == pytest.approx(50.0)
 
 
 def test_per_share_commission_minimum_and_cap():
-    # 100 shares x 0.005 = 0.50 -> minimum 1.00
-    assert costs.per_share_commission(100, 10_000) == pytest.approx(1.0)
-    # 1,000 shares x 0.005 = 5.00, under the 1% cap of 100
-    assert costs.per_share_commission(1_000, 10_000) == pytest.approx(5.0)
-    # 10 shares of a 5-dollar stock: min 1.00 but cap 1% of 50 = 0.50
-    assert costs.per_share_commission(10, 50) == pytest.approx(0.5)
+    # Tiered US: 50 shares x 0.0035 = 0.175 -> minimum 0.35
+    assert costs.per_share_commission(50, 5_000) == pytest.approx(0.35)
+    # 1,000 shares x 0.0035 = 3.50, under the 1% cap of 100
+    assert costs.per_share_commission(1_000, 10_000) == pytest.approx(3.5)
+    # 10 shares of a 2-dollar stock: min 0.35 but cap 1% of 20 = 0.20
+    assert costs.per_share_commission(10, 20) == pytest.approx(0.2)
 
 
 def test_fx_conversion_cost():

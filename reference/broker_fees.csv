@@ -1,6 +1,8 @@
-broker,plan,market,fee_type,rate,per_share,minimum,max_fraction,currency,source,checked_on,status
-IBKR,Pro Fixed,US,per_share,,0.005,1.00,0.01,USD,https://investors.interactivebrokers.com/en/pricing/commissions-home.php,2026-10-25,to_verify
-IBKR,Pro Fixed,LSE,percent,0.0005,,4.00,,USD,https://www.guyrutenberg.com/2025/01/04/tiered-vs-fixed-commissions-in-ibkr/ (Jan 2025 blog),2026-10-25,to_verify
-IBKR,Pro,FX,percent,0.00002,,2.00,,USD,https://www.interactivebrokers.ca/en/trading/us-stock-trading-costs-for-canadian-resi.php,2026-10-25,to_verify
-IBKR,Pro Fixed,XETRA,percent,0.0005,,3.00,,EUR,https://www.bankeronwheels.com/?p=109736 (updated 2026-07-28),2026-10-25,to_verify
-IBKR,Pro Fixed,Euronext,percent,0.0005,,3.00,,EUR,https://www.bankeronwheels.com/?p=109736 (updated 2026-07-28),2026-10-25,to_verify
+broker,plan,market,trading_currency,fee_type,rate,per_share,minimum,maximum,max_fraction,third_party_per_execution,currency,notes,source,checked_on,status
+IBKR,Pro Tiered,US,USD,per_share,,0.0035,0.35,,0.01,,USD,"Lowest volume tier (<=300,000 shares/month); plus regulatory, exchange and clearing fees",https://www.interactivebrokers.com.sg/en/pricing/commissions-stocks.php,2026-10-25,verified
+IBKR,Pro Tiered,LSE,USD,percent,0.0005,,1.70,39.00,,,USD,"USD-denominated; plus exchange and clearing fees (not itemised on page)",https://www.interactivebrokers.com.sg/en/pricing/commissions-stocks.php,2026-10-25,verified
+IBKR,Pro Tiered,SIX,USD,percent,0.0005,,1.70,39.00,,,USD,"USD-denominated; plus exchange, clearing and regulatory fees (not itemised on page)",https://www.interactivebrokers.com.sg/en/pricing/commissions-stocks.php,2026-10-25,verified
+IBKR,Pro Tiered,Euronext,USD,percent,0.0005,,1.70,39.00,,0.75,EUR,"USD-denominated (Amsterdam); EUR 0.75 per execution exchange fee passed through on ETFs",https://www.interactivebrokers.com.sg/en/pricing/commissions-stocks.php,2026-10-25,verified
+IBKR,Pro Tiered,Euronext,EUR,percent,0.0005,,1.25,29.00,,0.75,EUR,"EUR 0.75 per execution exchange fee passed through on ETFs",https://www.interactivebrokers.com.sg/en/pricing/commissions-stocks.php,2026-10-25,verified
+IBKR,Pro Tiered,XETRA,EUR,percent,0.0005,,1.25,29.00,,,EUR,"Plus exchange, clearing and regulatory fees (not itemised on page)",https://www.interactivebrokers.com.sg/en/pricing/commissions-stocks.php,2026-10-25,verified
+IBKR,Pro Tiered,FX,,percent,0.00002,,2.00,,,,USD,"Tier I (monthly FX value <= USD 1bn)",https://www.interactivebrokers.com.sg/en/pricing/commissions-spot-currencies.php,2026-10-25,verified

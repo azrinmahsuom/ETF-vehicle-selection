@@ -22,24 +22,28 @@ def annual_holding_cost(tracking_difference: float, withholding_drag: float) -> 
     return -tracking_difference + withholding_drag
 
 
-def percent_commission(trade_value: float, rate: float, minimum: float) -> float:
-    """Commission charged as a percentage of trade value with a per-order minimum (R8).
+def percent_commission(
+    trade_value: float, rate: float, minimum: float, maximum: float | None = None
+) -> float:
+    """Commission charged as a percentage of trade value, with a per-order minimum and cap (R8).
 
-    IBKR Fixed on LSE: rate=0.0005, minimum=4.0 (USD).
+    IBKR Pro Tiered, USD-traded on LSE: rate=0.0005, minimum=1.70, maximum=39.00 (USD).
     """
-    return max(trade_value * rate, minimum)
+    fee = max(trade_value * rate, minimum)
+    return fee if maximum is None else min(fee, maximum)
 
 
 def per_share_commission(
     shares: float,
     trade_value: float,
-    per_share: float = 0.005,
-    minimum: float = 1.0,
+    per_share: float = 0.0035,
+    minimum: float = 0.35,
     max_fraction: float = 0.01,
 ) -> float:
     """Commission charged per share, with a minimum and a cap as a fraction of trade value (R8).
 
-    Defaults are IBKR Fixed for US-listed ETFs: USD 0.005/share, min USD 1, max 1% of value.
+    Defaults are IBKR Pro Tiered for US-listed ETFs (lowest volume tier): USD 0.0035/share,
+    min USD 0.35, max 1% of value. Exchange and regulatory fees are extra.
     """
     return min(max(shares * per_share, minimum), trade_value * max_fraction)
 
