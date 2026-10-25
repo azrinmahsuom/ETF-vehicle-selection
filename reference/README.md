@@ -12,3 +12,5 @@ Rules (AGENTS.md rule 7):
 | `candidates.csv` | ETFs tracking each benchmark: ticker, ISIN, listing, domicile, share class, hedging, index variant, expense ratio | R12, R11 |
 | `withholding_rates.csv` | Investor-level withholding on distributions by fund domicile, for a Singapore tax resident | R4 |
 | `broker_fees.csv` | IBKR commission and FX schedules by market | R8 |
+| `annual_returns.csv` | Calendar-year NAV total return of each share class and its benchmark, from issuer factsheets/KIDs | R16 |
+| `excluded_candidates.csv` | Funds excluded from candidates and why | R14 |

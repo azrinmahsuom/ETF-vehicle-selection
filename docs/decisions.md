@@ -144,3 +144,20 @@ One entry per rule. **Status** is one of: *Supported* (evidence backs the rule a
 **Rule:** Use a USD-traded listing where one exists, because it avoids an FX conversion on every trade (R8). Among USD listings, prefer LSE, then Euronext Amsterdam, SIX, XETRA, Euronext Paris. If there's no USD listing, use the main EUR listing; FX conversion cost is then added to its trading cost.
 **Evidence:** IBKR charges 0.2 bps (min USD 2) per FX conversion (R8). The USD base currency is set by R1. LSE comes first because its IBKR fee schedule is the best documented of the venues (`reference/broker_fees.csv`).
 **Result (2026-10-25):** 20 of 24 candidates have a USD listing; 4 trade in EUR only (LU1829220216, FR0014017NX3, LU3243907741, LU1737654019). 8 candidates are under 3 years old and can't trigger a switch (R11): SCWX, ACSW, GPEA, ALLCE, ALLC, ISDA, AGAC, HGAD.
+
+### 2026-10-25 — R16 Tracking difference from NAV, using issuer-published calendar-year returns
+**Status:** Decided (follows the owner's instruction to use open sources; replaces measuring tracking difference from daily market prices)
+**Context:** Open daily index data exists for MSCI ACWI only: MSCI's end-of-day data, free for informational, non-commercial use, with redistribution prohibited ([MSCI index terms](https://www.msci.com/legal/index-terms)). No free daily history was found for the Bloomberg Global Aggregate; Bloomberg's quote pages show snapshots only ([Bloomberg LEGATRUU](https://www.bloomberg.com/professional/products/indices/quote/LEGATRUU:IND)).
+**Evidence (own test, 2026-10-25, Yahoo prices vs MSCI ACWI Net USD, trailing 3 years):**
+- US-listed ACWI correlates 0.95 with the index on the same day, so the dates are aligned.
+- LSE listings split between the same day (0.69) and the next (0.33), because they close hours before MSCI's index close.
+- Annualised monthly tracking error from market prices was 2.4% for LSE listings, and calendar-year tracking differences swung by about ±2%. That's 10–20 times the cost differences being ranked.
+- Yahoo also had a bad print: ISDA.AS +35% on 2025-12-31.
+- Conclusion: market prices can't rank tracking difference. The standard measure uses NAV, struck at the same closing prices as the index (issuers and the ESMA guidelines report NAV-based tracking difference).
+**Rule:**
+- Tracking difference = annualised fund NAV total return − annualised benchmark return over the last 3 complete calendar years (R2), from the calendar-year figures in the issuer's factsheet or KID.
+- These go in `reference/annual_returns.csv` with source and date.
+- A share class with fewer than 3 complete calendar years is ranked on what it has and flagged (R11).
+- Daily MSCI and Yahoo data are still used for spreads (R10), FX (R1), and as a cross-check on the factsheet figures.
+**Alternatives considered:** Daily market-price tracking difference (rejected: evidence above). Scraping issuer NAV history (rejected for now: each issuer's site differs and loads data in the browser, so it would be fragile). Paid index data (rejected: the owner asked for open sources).
+**Effect:** Tracking difference is now annual rather than daily. Calendar-year results lag by up to one year; the factsheet is updated monthly, but its calendar-year table only changes in January.

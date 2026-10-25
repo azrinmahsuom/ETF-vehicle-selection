@@ -50,3 +50,12 @@ def test_calendar_year_tracking_difference():
     result = metrics.calendar_year_tracking_difference(fund, index)
     assert result.loc[2024] == pytest.approx(-0.02)
     assert result.loc[2025] == pytest.approx(1.05 * 1.05 - 1.10)
+
+
+def test_tracking_difference_from_calendar_years():
+    # R16: 3 calendar years, fund 10%/-5%/20% vs benchmark 10.2%/-4.8%/20.1%
+    years = [2023, 2024, 2025]
+    fund = pd.Series([0.10, -0.05, 0.20], index=years)
+    bench = pd.Series([0.102, -0.048, 0.201], index=years)
+    expected = (1.10 * 0.95 * 1.20) ** (1 / 3) - (1.102 * 0.952 * 1.201) ** (1 / 3)
+    assert metrics.tracking_difference(fund, bench, periods_per_year=1) == pytest.approx(expected)
