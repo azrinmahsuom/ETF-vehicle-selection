@@ -14,7 +14,9 @@ data/external/*
 # Python
 __pycache__/
 *.py[cod]
+.venv
 .venv/
+.venv.nosync/  # iCloud Drive skips *.nosync; .venv is a symlink to it
 *.egg-info/
 .pytest_cache/
 .ruff_cache/

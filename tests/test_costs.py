@@ -110,3 +110,131 @@ def test_should_switch():
     assert not costs.should_switch(0.0005, 0.0050, 0.0, remaining_years=9)
     # Unrecovered 20 bps pushes breakeven to 14 years: fails with 13 left
     assert not costs.should_switch(0.0005, 0.0050, 0.0020, remaining_years=13)
+
+
+def test_abdi_ranaldo_spread_hand_example():
+    import math
+
+    import pandas as pd
+
+    high = pd.Series([101.0, 102.0, 101.5])
+    low = pd.Series([99.0, 100.0, 99.5])
+    close = pd.Series([100.5, 100.2, 101.0])
+    c = [math.log(x) for x in close]
+    eta = [(math.log(h) + math.log(lo)) / 2 for h, lo in zip(high, low, strict=True)]
+    mean = ((c[0] - eta[0]) * (c[0] - eta[1]) + (c[1] - eta[1]) * (c[1] - eta[2])) / 2
+    expected = math.sqrt(max(4 * mean, 0.0))
+    assert costs.abdi_ranaldo_spread(high, low, close) == pytest.approx(expected)
+
+
+def test_abdi_ranaldo_spread_close_at_midrange_is_zero():
+    import pandas as pd
+
+    high = pd.Series([101.0, 103.0, 102.0])
+    low = pd.Series([99.0, 101.0, 100.0])
+    close = (high * low) ** 0.5  # log close == log mid-range
+    assert costs.abdi_ranaldo_spread(high, low, close) == pytest.approx(0.0)
+
+
+def test_abdi_ranaldo_spread_drops_untraded_days():
+    import pandas as pd
+
+    # Second day has high == low (no trades) and is dropped, leaving the same result as day 1+3
+    high = pd.Series([101.0, 100.0, 101.5])
+    low = pd.Series([99.0, 100.0, 99.5])
+    close = pd.Series([100.5, 100.0, 101.0])
+    kept = costs.abdi_ranaldo_spread(high[[0, 2]], low[[0, 2]], close[[0, 2]])
+    assert costs.abdi_ranaldo_spread(high, low, close) == pytest.approx(kept)
+
+
+def test_trailing_distribution_yield():
+    import pandas as pd
+
+    dates = pd.to_datetime(["2025-06-15", "2025-12-15", "2026-06-15"])
+    dividends = pd.Series([0.50, 0.40, 0.60], index=dates)
+    close = pd.Series([100.0, 50.0], index=pd.to_datetime(["2026-06-30", "2026-10-23"]))
+    # 12 months to 2026-10-25: 0.40 + 0.60 = 1.00, over latest close 50 -> 2%
+    assert costs.trailing_distribution_yield(dividends, close, date(2026, 10, 25)) == pytest.approx(
+        0.02
+    )
+
+
+def _fees():
+    import pandas as pd
+
+    return pd.DataFrame(
+        [
+            {
+                "market": "LSE",
+                "trading_currency": "USD",
+                "fee_type": "percent",
+                "rate": 0.0005,
+                "per_share": None,
+                "minimum": 1.70,
+                "maximum": 39.0,
+                "max_fraction": None,
+                "third_party_per_execution": None,
+                "currency": "USD",
+            },
+            {
+                "market": "Euronext",
+                "trading_currency": "EUR",
+                "fee_type": "percent",
+                "rate": 0.0005,
+                "per_share": None,
+                "minimum": 1.25,
+                "maximum": 29.0,
+                "max_fraction": None,
+                "third_party_per_execution": 0.75,
+                "currency": "EUR",
+            },
+            {
+                "market": "US",
+                "trading_currency": "USD",
+                "fee_type": "per_share",
+                "rate": None,
+                "per_share": 0.0035,
+                "minimum": 0.35,
+                "maximum": None,
+                "max_fraction": 0.01,
+                "third_party_per_execution": None,
+                "currency": "USD",
+            },
+            {
+                "market": "FX",
+                "trading_currency": None,
+                "fee_type": "percent",
+                "rate": 0.00002,
+                "per_share": None,
+                "minimum": 2.0,
+                "maximum": None,
+                "max_fraction": None,
+                "third_party_per_execution": None,
+                "currency": "USD",
+            },
+        ]
+    )
+
+
+def test_trade_cost_lse_usd():
+    # 15,000 on LSE USD: half of 10 bps spread = 7.50; 0.05% = 7.50 commission; no FX -> 15.00
+    cost = costs.trade_cost_usd(15_000, "LSE", "USD", 100.0, 0.0010, _fees(), eur_per_usd=0.9)
+    assert cost == pytest.approx(15.0)
+
+
+def test_trade_cost_euronext_eur_adds_exchange_fee_and_fx():
+    # 10,000 USD = 9,000 EUR. Spread 10 bps -> 5.00. Commission 0.05% of 10,000 USD = 5.00
+    # (above the EUR 1.25 min). Exchange fee EUR 0.75 = 0.8333 USD. FX min 2.00. Total 12.8333
+    cost = costs.trade_cost_usd(10_000, "Euronext", "EUR", 50.0, 0.0010, _fees(), eur_per_usd=0.9)
+    assert cost == pytest.approx(5.0 + 5.0 + 0.75 / 0.9 + 2.0)
+
+
+def test_trade_cost_us_per_share():
+    # 10,000 at 100/share = 100 shares x 0.0035 = 0.35 (= min). Spread 1 bp -> 0.50. Total 0.85
+    cost = costs.trade_cost_usd(10_000, "US", "USD", 100.0, 0.0001, _fees(), eur_per_usd=0.9)
+    assert cost == pytest.approx(0.85)
+
+
+def test_trade_cost_unknown_market_fails_loudly():
+    with pytest.raises(ValueError):
+        costs.trade_cost_usd(10_000, "SIX", "USD", 100.0, 0.001, _fees(), eur_per_usd=0.9)

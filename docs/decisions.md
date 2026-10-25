@@ -110,10 +110,14 @@ One entry per rule. **Status** is one of: *Supported* (evidence backs the rule a
 **Rule:** Total cost of ownership ranking uses no risk-free rate. If R6 discounts future savings, use the 3M US T-bill (FRED `DTB3`) as the discount rate.
 **Evidence:** Source: [FRED DTB3](https://fred.stlouisfed.org/series/dtb3) (Federal Reserve H.15, daily since 1954). Cost comparison doesn't involve excess returns, so a risk-free rate has no role there.
 
-### 2026-10-25 — R10 Bid-ask spread estimate
-**Status:** Supported
-**Rule:** Use quoted spread data where available. Otherwise estimate from daily close/high/low with the Abdi–Ranaldo estimator, cross-checked against Corwin–Schultz, and validate against quoted spreads where both exist.
-**Evidence:** Peer-reviewed estimators: Corwin & Schultz (2012), *Journal of Finance* 67(2), 719–760, and Abdi & Ranaldo (2017), *Review of Financial Studies* 30(12), 4437–4480. A reference implementation is in R `bidask` ([CRAN docs](https://search.r-project.org/CRAN/packages/bidask/bidask.pdf)).
+### 2026-10-25 — R10 Bid-ask spread (revised after validation)
+**Status:** Revised 2026-10-25. The high-low estimator failed validation for these ETFs.
+**Rule:** Use the issuer- or exchange-published median bid-ask spread where available (`reference/spreads.csv`). Otherwise use a default full spread of 10 bps (`DEFAULT_SPREAD`), flagged as estimated. The owner can override with spreads observed in IBKR.
+**Evidence:**
+- The estimators are peer-reviewed: Abdi & Ranaldo (2017), *Review of Financial Studies* 30(12); Corwin & Schultz (2012), *Journal of Finance* 67(2). Abdi–Ranaldo is implemented as `costs.abdi_ranaldo_spread`.
+- Validation on the trailing quarter of Yahoo daily prices: US-listed ACWI estimated at 18 bps against a published 30-day median of 1 bp ([iShares](https://www.ishares.com/us/products/239600/ishares-msci-acwi-etf), as of 2026-10-23). ISAC was estimated at 29 bps against indicative 2–7 bps for ACWI UCITS ETFs on LSE (R8). High-low estimators were built for less liquid stocks; for very liquid ETFs, daily volatility swamps the spread signal.
+- The 10 bps default is above every indicative ACWI UCITS spread found (2–7 bps; one ESG variant 21 bps), so it is conservative. It also slightly overstates switching cost, which errs towards holding.
+**Pending:** Published spreads for the other candidates (issuer pages or LSE data), or the owner's observed spreads.
 
 ### 2026-10-25 — R11 Short-history ETFs
 **Status:** Approved by owner 2026-10-25
@@ -190,3 +194,8 @@ One entry per rule. **Status** is one of: *Supported* (evidence backs the rule a
 **Limitation:** UBS's window ends 2026-09 while the others end 2025-12, so its tracking difference covers a different 3 years. It is flagged by `window_end`, not adjusted.
 
 **R4 update 2026-10-25:** Luxembourg-domiciled distributions to a non-Luxembourg taxpayer: 0% withholding. Source: Amundi SICAV prospectus (August 2026), p527 ("Shareholders who are not Luxembourg taxpayers are not subject to any Luxembourg capital gains, income, withholding … taxes", with exceptions only for certain former Luxembourg residents and holders of over 10% of the SICAV). It covers Amundi Core Global Aggregate Bond (p297), the only Luxembourg distributing candidate (10AM).
+
+### 2026-10-25 — R2 reliability check, first result
+**Context:** First full pipeline run (2026-Q4). Under R6 as written, the tool says to switch ISAC → ACWD: annual saving 0.023% against a 0.20% switch cost, breakeven 8.8 years, with 19.2 years left.
+**Evidence (R2 test, calendar years 2023–2025):** ACWD minus ISAC tracking difference by year: −0.34, +0.01, +0.40 percentage points. Mean +0.023, standard deviation 0.37, standard error 0.21, so the mean is 0.11 standard errors from zero. The ranking between the two is not reliable at 3 years. For comparison, GLAG minus AGGG: −0.16, −0.03, −0.03 (mean −0.073, 1.7 standard errors).
+**Status:** Owner decision needed. Should R6 require the saving to be statistically distinguishable from zero before a switch? See the brief's Open questions.

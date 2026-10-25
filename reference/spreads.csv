@@ -1,0 +1,2 @@
+ticker,exchange,spread,source,checked_on,status
+ACWI,NASDAQ,0.0001,"https://www.ishares.com/us/products/239600/ishares-msci-acwi-etf (30 Day Median Bid/Ask Spread 0.01% as of 2026-10-23)",2026-10-25,verified
