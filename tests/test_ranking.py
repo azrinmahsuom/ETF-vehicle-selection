@@ -49,45 +49,51 @@ def test_periods_after_as_of_are_ignored():
     assert t.set_index("isin").loc["A", "periods"] == 2
 
 
+ISINS = ["H", "C1", "C2", "N", "U"]
+
+
 def _table():
     candidates = pd.DataFrame(
         {
-            "isin": ["H", "C1", "C2", "N"],
-            "ticker": ["HHH", "CC1", "CC2", "NEW"],
-            "benchmark_variant": ["X"] * 4,
-            "distribution": ["acc", "dist", "acc", "acc"],
-            "domicile": ["IE", "US", "IE", "IE"],
+            "isin": ISINS,
+            "ticker": ["HHH", "CC1", "CC2", "NEW", "UNV"],
+            "benchmark_variant": ["X"] * 5,
+            "distribution": ["acc", "dist", "acc", "acc", "acc"],
+            "domicile": ["IE", "US", "IE", "IE", "IE"],
+            "expense_ratio": [0.0020, 0.0010, 0.0015, 0.0005, 0.0001],
+            "status": ["verified"] * 4 + ["to_verify"],
         }
     )
     td = pd.DataFrame(
         {
-            "isin": ["H", "C1", "C2", "N"],
-            "ticker": ["HHH", "CC1", "CC2", "NEW"],
-            "benchmark_variant": ["X"] * 4,
-            "complete": [True, True, True, True],
-            "tracking_difference": [-0.0020, 0.0010, -0.0015, 0.0050],
+            "isin": ISINS,
+            "ticker": ["HHH", "CC1", "CC2", "NEW", "UNV"],
+            "benchmark_variant": ["X"] * 5,
+            "tracking_difference": [-0.0020, 0.0010, -0.0015, 0.0050, 0.0],
         }
     )
     wht = pd.DataFrame({"fund_domicile": ["IE", "US"], "withholding_rate": [0.0, 0.30]})
-    short = pd.Series([False, False, False, True])
+    short = pd.Series([False, False, False, True, False])
     return ranking.cost_table(candidates, td, wht, {"C1": 0.02}, short)
 
 
 def test_cost_table_holding_cost_and_eligibility():
     t = _table().set_index("isin")
-    # US dist beating its index by 0.10%: cost = -0.0010 + 2% yield x 30% = 0.0050
-    assert t.loc["C1", "annual_holding_cost"] == pytest.approx(0.0050)
+    # US dist: 0.10% TER + 2% yield x 30% withholding = 0.70%; tracking difference not used
+    assert t.loc["C1", "annual_holding_cost"] == pytest.approx(0.0070)
     assert t.loc["C2", "annual_holding_cost"] == pytest.approx(0.0015)
     assert t.loc["C1", "us_situs"]
     # Short history can't be ranked or trigger a switch, even though it looks cheapest
     assert not t.loc["N", "eligible"]
     assert pd.isna(t.loc["N", "rank"])
+    # Nor can an unverified row, however cheap its expense ratio
+    assert not t.loc["U", "eligible"]
     assert t.loc["C2", "rank"] == 1
 
 
 def test_switch_decision_picks_cheapest_eligible_and_applies_breakeven():
     t = _table()
-    one_way = {"H": 0.0010, "C1": 0.0010, "C2": 0.0010, "N": 0.0010}
+    one_way = dict.fromkeys(ISINS, 0.0010)
     # H costs 0.20%/yr, C2 0.15%/yr -> saving 5 bps; switch cost 20 bps -> breakeven 4 years
     d = ranking.switch_decision("H", t, one_way, unrecovered=0.0, remaining_years=19.2)
     assert d.best_candidate == "CC2 (C2)"
@@ -99,6 +105,6 @@ def test_switch_decision_picks_cheapest_eligible_and_applies_breakeven():
 
 
 def test_switch_decision_holds_when_already_cheapest():
-    d = ranking.switch_decision("C2", _table(), {i: 0.001 for i in ["H", "C1", "C2", "N"]}, 0.0, 19)
+    d = ranking.switch_decision("C2", _table(), dict.fromkeys(ISINS, 0.001), 0.0, 19)
     assert not d.switch
     assert d.reason.startswith("hold: already")

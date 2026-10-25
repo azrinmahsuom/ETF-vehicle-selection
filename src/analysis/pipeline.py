@@ -187,10 +187,12 @@ def write_public_ranking(
     lines = [
         f"# ETF ranking, {quarter}",
         "",
-        f"Run on {as_of.isoformat()}. Annual holding cost = −tracking difference + investor "
-        "withholding on distributions (rules R3, R4). Tracking difference uses each share "
-        "class's latest three 12-month periods from issuer factsheets (R16). Candidates with "
-        "under 3 years of history or an incomplete window are listed but not ranked (R11).",
+        f"Run on {as_of.isoformat()}. Annual holding cost = expense ratio + tax withheld on "
+        "distributions for a Singapore resident (rules R3, R4); both are fixed, published "
+        "figures. Tracking difference (each share class's latest three 12-month periods from "
+        "issuer factsheets, R16) is shown for information only: three years of it are too "
+        "noisy to separate close funds. Candidates under 3 years old or not yet verified at "
+        "source are listed but not ranked (R11).",
         "",
     ]
     for variant, g in ordered.groupby("benchmark_variant", sort=False):
@@ -200,12 +202,12 @@ def write_public_ranking(
                 "ETF": g["ticker"] + " (" + g["exchange"] + ")",
                 "Domicile": g["domicile"],
                 "Expense ratio": g["expense_ratio"].map(pct),
-                "Tracking difference": g["tracking_difference"].map(pct),
+                "Withholding drag": g["withholding_drag"].map(pct),
+                "Annual holding cost": g["annual_holding_cost"].map(pct),
+                "Tracking difference (info)": g["tracking_difference"].map(pct),
                 "Window end": g["window_end"].map(
                     lambda d: "—" if pd.isna(d) else d.strftime("%Y-%m")
                 ),
-                "Withholding drag": g["withholding_drag"].map(pct),
-                "Annual holding cost": g["annual_holding_cost"].map(pct),
                 "Notes": [
                     ", ".join(
                         n

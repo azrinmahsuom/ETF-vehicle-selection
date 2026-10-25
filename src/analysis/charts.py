@@ -73,14 +73,14 @@ def holding_cost_chart(table: pd.DataFrame, quarter: str, path: Path) -> None:
         ax.set_title(VARIANT_TITLES[variant], loc="left", fontsize=10, color=TEXT, pad=4)
         ax.tick_params(axis="y", labelcolor=TEXT)
         _style(ax)
-    axes[-1].set_xlim(lo - (hi - lo) * 0.15, hi * 1.18)
+    axes[-1].set_xlim(lo - (hi - lo) * 0.15 if lo < 0 else 0, hi * 1.18)
     axes[-1].set_xlabel(
-        "Annual holding cost (% of position a year; below 0 = beats its index)",
+        "Annual holding cost (% of position a year)",
         fontsize=9,
         color=TEXT_SECONDARY,
     )
     fig.suptitle(
-        "Within each index, the cheapest ETFs cost under 0.2% a year to hold",
+        "US withholding tax makes US-listed ACWI the costliest ETF to hold",
         x=0.01,
         ha="left",
         fontsize=12,
@@ -90,9 +90,9 @@ def holding_cost_chart(table: pd.DataFrame, quarter: str, path: Path) -> None:
     fig.text(
         0.01,
         0.005,
-        f"Ranked ETFs only ({quarter} run). Holding cost = −tracking difference over the "
-        "latest three 12-month periods + investor withholding tax.\nSource: issuer "
-        "factsheets (NAV returns); IRS / issuer tax documents. Not investment advice.",
+        f"Ranked ETFs only ({quarter} run). Holding cost = expense ratio + tax withheld on "
+        "distributions for a Singapore resident.\nSource: issuer factsheets (expense ratios, "
+        "distributions); tax treaty summaries, issuer prospectus. Not investment advice.",
         fontsize=7.5,
         color=TEXT_SECONDARY,
         va="bottom",

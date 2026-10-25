@@ -54,9 +54,11 @@ def cost_table(
 ) -> pd.DataFrame:
     """Annual holding cost per candidate, and whether it may trigger a switch (R3, R4, R11).
 
-    annual_holding_cost = -tracking difference + investor withholding on distributions.
-    eligible means a complete tracking-difference window and at least 3 years of history.
-    The rank is within each benchmark variant, cheapest first, among eligible candidates.
+    annual_holding_cost = expense ratio + investor withholding on distributions (R3, revised).
+    Tracking difference is carried along for information only.
+    eligible means at least 3 years of history and a row verified at source, so an unchecked
+    expense ratio can't drive a switch. The rank is within each benchmark variant, cheapest
+    first, among eligible candidates.
     """
     rates = withholding.set_index("fund_domicile")["withholding_rate"]
     t = candidates.merge(td.drop(columns=["ticker", "benchmark_variant"]), on="isin", how="left")
@@ -71,14 +73,12 @@ def cost_table(
         for y, r in zip(t["distribution_yield"], t["withholding_rate"], strict=True)
     ]
     t["annual_holding_cost"] = [
-        costs.annual_holding_cost(td_, w)
-        for td_, w in zip(t["tracking_difference"], t["withholding_drag"], strict=True)
+        costs.annual_holding_cost(er, w)
+        for er, w in zip(t["expense_ratio"], t["withholding_drag"], strict=True)
     ]
     t["us_situs"] = t["domicile"] == "US"
     t["eligible"] = (
-        t["complete"].fillna(False).astype(bool)
-        & ~t["short_history"]
-        & t["annual_holding_cost"].notna()
+        ~t["short_history"] & (t["status"] == "verified") & t["annual_holding_cost"].notna()
     )
     t["rank"] = (
         t[t["eligible"]].groupby("benchmark_variant")["annual_holding_cost"].rank(method="min")

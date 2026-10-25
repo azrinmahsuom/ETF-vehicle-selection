@@ -15,13 +15,12 @@ def test_investor_withholding_drag_accumulating_is_zero():
 
 
 def test_annual_holding_cost():
-    # Fund lags net index by 0.20% and loses 0.45% to withholding -> 0.65% a year
-    assert costs.annual_holding_cost(-0.0020, 0.0045) == pytest.approx(0.0065)
+    # 0.20% expense ratio + 0.45% withholding drag -> 0.65% a year
+    assert costs.annual_holding_cost(0.0020, 0.0045) == pytest.approx(0.0065)
 
 
-def test_annual_holding_cost_fund_beats_index():
-    # Irish fund beating the net index by 0.10%, accumulating -> negative cost
-    assert costs.annual_holding_cost(0.0010, 0.0) == pytest.approx(-0.0010)
+def test_annual_holding_cost_accumulating_is_just_the_expense_ratio():
+    assert costs.annual_holding_cost(0.0012, 0.0) == pytest.approx(0.0012)
 
 
 def test_percent_commission_minimum_and_cap():

@@ -20,9 +20,13 @@ def investor_withholding_drag(distribution_yield: float, withholding_rate: float
     return distribution_yield * withholding_rate
 
 
-def annual_holding_cost(tracking_difference: float, withholding_drag: float) -> float:
-    """Annual cost of holding a fund: lag behind the net index plus investor withholding (R3)."""
-    return -tracking_difference + withholding_drag
+def annual_holding_cost(expense_ratio: float, withholding_drag: float) -> float:
+    """Annual cost of holding a fund: expense ratio plus investor withholding (R3, revised).
+
+    Both are fixed, published figures. Tracking difference is reported separately and does not
+    enter the cost, because three years of it are too noisy to separate close funds.
+    """
+    return expense_ratio + withholding_drag
 
 
 def percent_commission(

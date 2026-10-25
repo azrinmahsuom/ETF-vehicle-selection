@@ -199,3 +199,15 @@ One entry per rule. **Status** is one of: *Supported* (evidence backs the rule a
 **Context:** First full pipeline run (2026-Q4). Under R6 as written, the tool says to switch ISAC → ACWD: annual saving 0.023% against a 0.20% switch cost, breakeven 8.8 years, with 19.2 years left.
 **Evidence (R2 test, calendar years 2023–2025):** ACWD minus ISAC tracking difference by year: −0.34, +0.01, +0.40 percentage points. Mean +0.023, standard deviation 0.37, standard error 0.21, so the mean is 0.11 standard errors from zero. The ranking between the two is not reliable at 3 years. For comparison, GLAG minus AGGG: −0.16, −0.03, −0.03 (mean −0.073, 1.7 standard errors).
 **Status:** Owner decision needed. Should R6 require the saving to be statistically distinguishable from zero before a switch? See the brief's Open questions.
+
+### 2026-10-25 — R3 revised: holding cost = expense ratio + tax on distributions
+**Status:** Decided by owner 2026-10-25 (option 1 of three offered). Supersedes R3's tracking-difference-based cost.
+**Context:** The R2 reliability check showed that three years of tracking difference can't separate close funds (ACWD vs ISAC: mean gap +0.023%, standard error 0.21%). Three options were offered: (1) TER + tax only, (2) tracking difference with a 2-standard-error test, (3) TER + tax by default, switching to tracking difference when it is statistically clear.
+**Rule:**
+- Annual holding cost = expense ratio + investor withholding on distributions (R4). Both are fixed, published figures.
+- The switch rule's saving S (R6) is the difference in this cost.
+- Tracking difference (R16) is still computed and reported for information; it does not enter the cost, the ranking or the switch.
+- A candidate can be ranked or trigger a switch only if it has at least 3 years of history (R11) and its row is verified against an issuer document (R13), so an unchecked expense ratio can't drive a trade.
+**Evidence:** Morningstar treats the expense ratio as the most predictable component of tracking difference ([Morningstar](https://morningstar.co.uk/uk/news/66096/the-total-cost-of-etf-ownership.aspx)). The R2 test above shows the rest of tracking difference is dominated by year-to-year noise at a 3-year horizon.
+**Known omission:** Costs or gains that show up only in tracking difference aren't counted: withholding inside the fund (e.g. 15% on US dividends in an Irish fund, against 30% assumed by the net index), securities-lending income, swap costs and sampling error. Two funds with equal TERs therefore tie, as all 0.10% Global Aggregate funds do.
+**Effect (2026-Q4):** ISAC → ACWD: S = 0.08%/yr (0.20% vs 0.12%), switch cost 0.20%, breakeven 2.5 years against 19.2 left: switch. AGGG: every eligible unhedged fund costs 0.10%: hold.
