@@ -1,3 +1,4 @@
 fund_domicile,investor_residence,distribution_type,withholding_rate,source,checked_on,status
 US,SG,dividend,0.30,"IRS Publication 515 default rate; no US-Singapore income tax treaty (via https://paasa.com/blog/us-dividend-withholding-tax-singapore)",2026-10-25,to_verify
 IE,SG,dividend,0.00,"Ireland does not withhold on UCITS distributions to non-residents (via https://paasa.com/blog/dividend-withholding-tax-on-irish-ucits)",2026-10-25,to_verify
+LU,SG,dividend,0.00,"Amundi SICAV prospectus (Aug 2026) p527: shareholders who are not Luxembourg taxpayers are not subject to any Luxembourg withholding tax; covers Amundi Core Global Aggregate Bond (p297). Owner-supplied PDF data/external/PSC_1_UM49675_eng_GBR_20260901_20260804.pdf",2026-10-25,verified

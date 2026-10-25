@@ -188,3 +188,5 @@ One entry per rule. **Status** is one of: *Supported* (evidence backs the rule a
 - Ranking within a variant is by tracking difference, which is close to currency-invariant because fund and benchmark are measured in the same currency.
 **Evidence:** Tracking difference is defined against the fund's benchmark in the fund's currency (R12, ESMA guidelines). The factsheets above, saved by the owner in `data/external/` (not committed; public documents).
 **Limitation:** UBS's window ends 2026-09 while the others end 2025-12, so its tracking difference covers a different 3 years. It is flagged by `window_end`, not adjusted.
+
+**R4 update 2026-10-25:** Luxembourg-domiciled distributions to a non-Luxembourg taxpayer: 0% withholding. Source: Amundi SICAV prospectus (August 2026), p527 ("Shareholders who are not Luxembourg taxpayers are not subject to any Luxembourg capital gains, income, withholding … taxes", with exceptions only for certain former Luxembourg residents and holders of over 10% of the SICAV). It covers Amundi Core Global Aggregate Bond (p297), the only Luxembourg distributing candidate (10AM).
