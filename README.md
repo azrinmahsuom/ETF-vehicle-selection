@@ -44,7 +44,7 @@ uv run python -m analysis.pipeline   # run the analysis end to end
 
 ```
 ├── AGENTS.md          Rules for AI coding agents working in this repo (CLAUDE.md points here)
-├── data/              Raw, external and processed data (contents git-ignored)
+├── data/              Downloads and personal inputs (not committed; created by the code)
 ├── docs/              Project brief and methodology decision log
 ├── notebooks/         Exploration only; anything reusable moves to src/
 ├── reference/         Hand-researched inputs with sources (candidates, tax rates, broker fees)

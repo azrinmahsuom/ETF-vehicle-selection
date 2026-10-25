@@ -7,8 +7,6 @@
 data/raw/*
 data/processed/*
 data/external/*
-!data/**/.gitkeep
-!data/README.md
 *.parquet
 *.feather
 *.h5

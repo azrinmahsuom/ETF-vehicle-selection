@@ -12,7 +12,7 @@ A public investment project by Azrin Mahsuom, CFA. The README must stand on its 
 
 1. **Public data only.** Never use files that look like they came from an employer, client or internal system (client names, account numbers, internal identifiers, firm templates or letterheads). If unsure, stop and ask.
 2. **No secrets in code, output or commits.** API keys come from `.env` via `analysis.config.get_secret`. Never print, log or hardcode them, and never read `.env` directly.
-3. **Never commit data files.** Everything under `data/` except READMEs and `.gitkeep` is git-ignored. Code must be able to re-download or regenerate it.
+3. **Never commit data files.** Everything under `data/` is git-ignored. Code must be able to re-download or regenerate it.
 4. **No look-ahead bias.** A signal at time t uses only data available at t. Lag fundamentals by their publication delay. If you can't guarantee this, say so explicitly.
 5. **No survivorship bias without disclosure.** If the universe is today's constituents, state it in the README's Limitations.
 6. **Never fabricate numbers.** Every figure in the README or reports must come from running the code. If it hasn't been computed, write `TBD`.
@@ -27,13 +27,18 @@ A public investment project by Azrin Mahsuom, CFA. The README must stand on its 
 
 ## Layout
 
+The root `README.md` is the only README. Folder rules live here.
+
 - `src/analysis/`: all reusable logic. Small functions, type hints, docstrings.
-  - `config.py` paths and settings · `data.py` load/clean · `metrics.py` returns and risk · `pipeline.py` end-to-end run
-- `notebooks/`: exploration only, named `NN-short-description.ipynb`. Code used twice moves to `src/`.
-- `data/raw/` untouched downloads · `data/external/` reference data · `data/processed/` cleaned outputs.
-- `reports/figures/`: final charts as PNG, committed and referenced from the README.
+  - `config.py` paths and settings · `data.py` downloads and loading · `reference.py` reference inputs and gap checks · `metrics.py` returns and tracking difference · `costs.py` cost model and switch rule · `ranking.py` tracking-difference table · `pipeline.py` end-to-end run
+- `reference/` (committed): hand-researched inputs that code can't download (R13): `candidates.csv`, `excluded_candidates.csv`, `withholding_rates.csv`, `broker_fees.csv`, `annual_returns.csv`, `benchmark_returns.csv`.
+  - Every row cites a source and the date it was checked, with `status` `verified` (primary document) or `to_verify` (secondary source).
+  - When a value changes, update the row, its date and its source; git history keeps the old value.
+- `data/` (not committed): `raw/` downloads exactly as received, never edited by hand · `external/` the owner's personal inputs (portfolio, holdings, switch log) · `processed/` outputs written only by `src/analysis/`. Folders are created by the code.
+- `notebooks/`: exploration only, named `NN-short-description.ipynb`. Import from `src/analysis`; code used twice moves to `src/` with a test. Clear large outputs before committing. Start with `uv run jupyter lab`.
+- `reports/figures/`: final charts as PNG (150–200 dpi, 1200px wide), committed and referenced from the README. Final results belong here, not in notebooks.
 - `docs/brief.md` project intake · `docs/decisions.md` methodology log.
-- `tests/`: a test for every function in `metrics.py`, using small hand-checkable inputs.
+- `tests/`: a test for every function in `src/analysis/`, using small hand-checkable inputs.
 
 ## Commands
 
