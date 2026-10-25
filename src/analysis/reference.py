@@ -34,18 +34,25 @@ def short_history(candidates: pd.DataFrame, as_of: date, min_years: float = 3.0)
 
 
 def coverage_gaps(
-    candidates: pd.DataFrame, withholding: pd.DataFrame, broker_fees: pd.DataFrame
+    candidates: pd.DataFrame,
+    withholding: pd.DataFrame,
+    broker_fees: pd.DataFrame,
+    annual_returns: pd.DataFrame | None = None,
 ) -> list[str]:
     """List every candidate input the cost model would have to guess at.
 
     Checks: a withholding rate for each distributing class's domicile (R4), a fee schedule for
-    each exchange (R8), a known hedging status (R12), and rows not yet verified at source.
+    each exchange (R8), a known hedging status (R12), calendar-year NAV returns (R16) when
+    annual_returns is given, and rows not yet verified at source.
     """
     gaps = []
     domiciles = set(withholding["fund_domicile"])
     markets = set(broker_fees["market"])
+    with_returns = set(annual_returns["isin"]) if annual_returns is not None else None
     for row in candidates.itertuples():
         label = f"{row.ticker} ({row.isin})"
+        if with_returns is not None and row.isin not in with_returns:
+            gaps.append(f"{label}: no calendar-year NAV returns")
         if row.distribution == "dist" and row.domicile not in domiciles:
             gaps.append(f"{label}: no withholding rate for {row.domicile}-domiciled distributions")
         market = FEE_MARKET.get(row.exchange)

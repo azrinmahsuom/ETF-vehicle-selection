@@ -161,3 +161,9 @@ One entry per rule. **Status** is one of: *Supported* (evidence backs the rule a
 - Daily MSCI and Yahoo data are still used for spreads (R10), FX (R1), and as a cross-check on the factsheet figures.
 **Alternatives considered:** Daily market-price tracking difference (rejected: evidence above). Scraping issuer NAV history (rejected for now: each issuer's site differs and loads data in the browser, so it would be fragile). Paid index data (rejected: the owner asked for open sources).
 **Effect:** Tracking difference is now annual rather than daily. Calendar-year results lag by up to one year; the factsheet is updated monthly, but its calendar-year table only changes in January.
+
+**Update 2026-10-25:**
+- iShares factsheets compare USD-hedged share classes against the fund's *unhedged* benchmark (AGGU 2022: −11.65% vs −16.25%), so a factsheet's benchmark column can't always be used as-is.
+- Benchmark returns are therefore stored once per variant in `reference/benchmark_returns.csv`, taken from a factsheet whose benchmark matches the variant. SPDR's hedged factsheets print the USD-hedged index LEGATRUH.
+- Within a variant, ranking by annualised NAV return gives the same order as ranking by tracking difference, because the index return is common to all of them.
+- First result (2023–2025, 10 verified classes): every tracking difference is between −0.21% and +0.05% a year, consistent with the funds' 0.10–0.32% expense ratios after withholding effects.

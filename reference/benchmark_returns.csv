@@ -1,0 +1,24 @@
+benchmark_variant,year,index_return,source,checked_on,status
+MSCI ACWI Net USD,2016,0.0786,https://www.ishares.com/uk/individual/en/literature/fact-sheet/ssac-ishares-msci-acwi-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+MSCI ACWI Net USD,2017,0.2397,https://www.ishares.com/uk/individual/en/literature/fact-sheet/ssac-ishares-msci-acwi-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+MSCI ACWI Net USD,2018,-0.0941,https://www.ishares.com/uk/individual/en/literature/fact-sheet/ssac-ishares-msci-acwi-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+MSCI ACWI Net USD,2019,0.266,https://www.ishares.com/uk/individual/en/literature/fact-sheet/ssac-ishares-msci-acwi-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+MSCI ACWI Net USD,2020,0.1625,https://www.ishares.com/uk/individual/en/literature/fact-sheet/ssac-ishares-msci-acwi-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+MSCI ACWI Net USD,2021,0.1854,https://www.ishares.com/uk/individual/en/literature/fact-sheet/ssac-ishares-msci-acwi-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+MSCI ACWI Net USD,2022,-0.1836,https://www.ishares.com/uk/individual/en/literature/fact-sheet/ssac-ishares-msci-acwi-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+MSCI ACWI Net USD,2023,0.222,https://www.ishares.com/uk/individual/en/literature/fact-sheet/ssac-ishares-msci-acwi-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+MSCI ACWI Net USD,2024,0.1749,https://www.ishares.com/uk/individual/en/literature/fact-sheet/ssac-ishares-msci-acwi-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+MSCI ACWI Net USD,2025,0.2234,https://www.ishares.com/uk/individual/en/literature/fact-sheet/ssac-ishares-msci-acwi-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+Bloomberg Global Aggregate USD unhedged,2018,-0.012,https://www.ishares.com/uk/individual/en/literature/fact-sheet/aggg-ishares-core-global-aggregate-bond-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+Bloomberg Global Aggregate USD unhedged,2019,0.0684,https://www.ishares.com/uk/individual/en/literature/fact-sheet/aggg-ishares-core-global-aggregate-bond-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+Bloomberg Global Aggregate USD unhedged,2020,0.092,https://www.ishares.com/uk/individual/en/literature/fact-sheet/aggg-ishares-core-global-aggregate-bond-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+Bloomberg Global Aggregate USD unhedged,2021,-0.0471,https://www.ishares.com/uk/individual/en/literature/fact-sheet/aggg-ishares-core-global-aggregate-bond-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+Bloomberg Global Aggregate USD unhedged,2022,-0.1625,https://www.ishares.com/uk/individual/en/literature/fact-sheet/aggg-ishares-core-global-aggregate-bond-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+Bloomberg Global Aggregate USD unhedged,2023,0.0572,https://www.ishares.com/uk/individual/en/literature/fact-sheet/aggg-ishares-core-global-aggregate-bond-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+Bloomberg Global Aggregate USD unhedged,2024,-0.0169,https://www.ishares.com/uk/individual/en/literature/fact-sheet/aggg-ishares-core-global-aggregate-bond-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+Bloomberg Global Aggregate USD unhedged,2025,0.0817,https://www.ishares.com/uk/individual/en/literature/fact-sheet/aggg-ishares-core-global-aggregate-bond-ucits-etf-fund-fact-sheet-en-gb.pdf,2026-10-25,verified
+Bloomberg Global Aggregate USD hedged,2021,-0.0139,https://www.ssga.com/library-content/products/factsheets/etfs/emea/factsheet-emea-en_gb-spfu-gy.pdf,2026-10-25,verified
+Bloomberg Global Aggregate USD hedged,2022,-0.1122,https://www.ssga.com/library-content/products/factsheets/etfs/emea/factsheet-emea-en_gb-spfu-gy.pdf,2026-10-25,verified
+Bloomberg Global Aggregate USD hedged,2023,0.0715,https://www.ssga.com/library-content/products/factsheets/etfs/emea/factsheet-emea-en_gb-spfu-gy.pdf,2026-10-25,verified
+Bloomberg Global Aggregate USD hedged,2024,0.034,https://www.ssga.com/library-content/products/factsheets/etfs/emea/factsheet-emea-en_gb-spfu-gy.pdf,2026-10-25,verified
+Bloomberg Global Aggregate USD hedged,2025,0.0486,https://www.ssga.com/library-content/products/factsheets/etfs/emea/factsheet-emea-en_gb-spfu-gy.pdf,2026-10-25,verified

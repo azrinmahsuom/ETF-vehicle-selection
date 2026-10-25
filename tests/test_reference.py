@@ -56,3 +56,9 @@ def test_coverage_gaps_finds_each_problem():
 
 def test_accumulating_class_needs_no_withholding_rate():
     assert reference.coverage_gaps(_candidates(domicile="LU"), WHT, FEES) == []
+
+
+def test_coverage_gaps_flags_missing_annual_returns():
+    annual = pd.DataFrame({"isin": ["SOMETHING_ELSE"]})
+    gaps = reference.coverage_gaps(_candidates(), WHT, FEES, annual)
+    assert gaps == ["AAA (IE0000000001): no calendar-year NAV returns"]
